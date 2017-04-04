@@ -23,8 +23,11 @@ import com.zaaach.citypicker.adapter.ResultListAdapter;
 import com.zaaach.citypicker.db.DBManager;
 import com.zaaach.citypicker.model.City;
 import com.zaaach.citypicker.model.LocateState;
+import com.zaaach.citypicker.model.MsgEventBus;
 import com.zaaach.citypicker.utils.StringUtils;
 import com.zaaach.citypicker.view.SideLetterBar;
+
+import org.simple.eventbus.EventBus;
 
 import java.util.List;
 
@@ -33,6 +36,7 @@ import java.util.List;
  */
 public class CityPickerActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String KEY_PICKED_CITY = "picked_city";
+    public static final String KEY_EVENTBUS_TAG = "eventbus_tag";
 
     private ListView mListView;
     private ListView mResultListView;
@@ -48,15 +52,22 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
     private DBManager dbManager;
 
     private AMapLocationClient mLocationClient;
+    private String mEventbusTag ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cp_activity_city_list);
 
+        getIntentData();
         initData();
         initView();
         initLocation();
+    }
+
+    private void getIntentData() {
+        Intent intent = getIntent();
+        mEventbusTag = intent.getStringExtra(KEY_EVENTBUS_TAG);
     }
 
     private void initLocation() {
@@ -167,9 +178,13 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void back(String city){
-        Intent data = new Intent();
-        data.putExtra(KEY_PICKED_CITY, city);
-        setResult(RESULT_OK, data);
+        if(mEventbusTag.length()>0){
+            EventBus.getDefault().post(new MsgEventBus(city), mEventbusTag);
+        }else {
+            Intent data = new Intent();
+            data.putExtra(KEY_PICKED_CITY, city);
+            setResult(RESULT_OK, data);
+        }
         finish();
     }
 
