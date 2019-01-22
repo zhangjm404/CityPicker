@@ -13,27 +13,13 @@
 
 ![image](https://github.com/zaaach/CityPicker/raw/master/art/screen.gif)
 
-# APK
-
-下载[demo.apk](https://github.com/zaaach/CityPicker/raw/master/art/demo.apk)体验.
 
 # Install
 
 Gradle:
 
 ```groovy
-compile 'com.zaaach:citypicker:1.1'
-```
-
-or Maven:
-
-```xm
-<dependency>
-  <groupId>com.zaaach</groupId>
-  <artifactId>citypicker</artifactId>
-  <version>1.1</version>
-  <type>pom</type>
-</dependency>
+compile 'com.github.zhangjm404:CityPicker:1.0.1'
 ```
 
 or 下载library手动导入.
@@ -44,12 +30,6 @@ or 下载library手动导入.
 
 ### step1:
 
-在你项目的`manifest.xml`中添加开发平台申请的key
-
-```xml
-<meta-data android:name="com.amap.api.v2.apikey"
-           android:value="your key"/>
-```
 还需要添加`CityPickerActivity`
 
 ```xml
@@ -62,6 +42,7 @@ or 下载library手动导入.
 
 ### Step2
 
+写法1： 用ActivityForResult 接收返回的值
 ```java
 private static final int REQUEST_CODE_PICK_CITY = 0;
 //启动
@@ -77,6 +58,20 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             resultTV.setText("当前选择：" + city);
         }
     }
+}
+```
+写法2： 用ActivityForResult 接收返回的值
+```java
+//启动
+Intent intent = new Intent(MainActivity.this, CityPickerActivity.class);
+intent.putExtra(CityPickerActivity.KEY_EVENTBUS_TAG, TAG_MAIN);
+intent.putExtra(CityPickerActivity.KEY_LOCATE_CITY, "广州");
+startActivity(intent);
+
+//接收
+@Subscriber(tag = TAG_MAIN, mode = ThreadMode.MAIN)
+private void getCity(MsgEventBus msgEventBus) {
+    resultTV.setText("当前选择：" + msgEventBus.getCity());
 }
 ```
 

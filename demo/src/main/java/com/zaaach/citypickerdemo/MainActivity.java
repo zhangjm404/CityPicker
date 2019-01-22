@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CityPickerActivity.class);
                 intent.putExtra(CityPickerActivity.KEY_EVENTBUS_TAG, TAG_MAIN);
+                intent.putExtra(CityPickerActivity.KEY_LOCATE_CITY, "广州");
                 startActivity(intent);
             }
         });

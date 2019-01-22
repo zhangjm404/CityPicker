@@ -14,17 +14,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.zaaach.citypicker.adapter.CityListAdapter;
 import com.zaaach.citypicker.adapter.ResultListAdapter;
 import com.zaaach.citypicker.db.DBManager;
 import com.zaaach.citypicker.model.City;
 import com.zaaach.citypicker.model.LocateState;
 import com.zaaach.citypicker.model.MsgEventBus;
-import com.zaaach.citypicker.utils.StringUtils;
 import com.zaaach.citypicker.view.SideLetterBar;
 
 import org.simple.eventbus.EventBus;
@@ -37,6 +32,7 @@ import java.util.List;
 public class CityPickerActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String KEY_PICKED_CITY = "picked_city";
     public static final String KEY_EVENTBUS_TAG = "eventbus_tag";
+    public static final String KEY_LOCATE_CITY = "locate_city";
 
     private ListView mListView;
     private ListView mResultListView;
@@ -51,8 +47,8 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
     private List<City> mAllCities;
     private DBManager dbManager;
 
-    private AMapLocationClient mLocationClient;
     private String mEventbusTag ="";
+    private String mCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,38 +58,14 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
         getIntentData();
         initData();
         initView();
-        initLocation();
     }
 
     private void getIntentData() {
         Intent intent = getIntent();
         mEventbusTag = intent.getStringExtra(KEY_EVENTBUS_TAG);
+        mCity = intent.getStringExtra(KEY_LOCATE_CITY);
     }
 
-    private void initLocation() {
-        mLocationClient = new AMapLocationClient(this);
-        AMapLocationClientOption option = new AMapLocationClientOption();
-        option.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-        option.setOnceLocation(true);
-        mLocationClient.setLocationOption(option);
-        mLocationClient.setLocationListener(new AMapLocationListener() {
-            @Override
-            public void onLocationChanged(AMapLocation aMapLocation) {
-                if (aMapLocation != null) {
-                    if (aMapLocation.getErrorCode() == 0) {
-                        String city = aMapLocation.getCity();
-                        String district = aMapLocation.getDistrict();
-                        String location = StringUtils.extractLocation(city, district);
-                        mCityAdapter.updateLocateState(LocateState.SUCCESS, location);
-                    } else {
-                        //定位失败
-                        mCityAdapter.updateLocateState(LocateState.FAILED, null);
-                    }
-                }
-            }
-        });
-        mLocationClient.startLocation();
-    }
 
     private void initData() {
         dbManager = new DBManager(this);
@@ -108,12 +80,12 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onLocateClick() {
-                mCityAdapter.updateLocateState(LocateState.LOCATING, null);
-                mLocationClient.startLocation();
+//                mCityAdapter.updateLocateState(LocateState.LOCATING, null);
             }
         });
 
         mResultAdapter = new ResultListAdapter(this, null);
+        mCityAdapter.updateLocateState(LocateState.SUCCESS, mCity);
     }
 
     private void initView() {
@@ -200,11 +172,5 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
             finish();
 
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mLocationClient.stopLocation();
     }
 }
