@@ -20,6 +20,7 @@ import com.zaaach.citypicker.db.DBManager;
 import com.zaaach.citypicker.model.City;
 import com.zaaach.citypicker.model.LocateState;
 import com.zaaach.citypicker.model.MsgEventBus;
+import com.zaaach.citypicker.utils.QMUIStatusBarHelper;
 import com.zaaach.citypicker.view.SideLetterBar;
 
 import org.simple.eventbus.EventBus;
@@ -89,6 +90,8 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initView() {
+        setStatusBar();
+
         mListView = (ListView) findViewById(R.id.listview_all_city);
         mListView.setAdapter(mCityAdapter);
 
@@ -149,8 +152,12 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
         backBtn.setOnClickListener(this);
     }
 
+    private void setStatusBar() {
+        QMUIStatusBarHelper.setStatusBarLightMode(this);
+    }
+
     private void back(String city){
-        if(mEventbusTag.length()>0){
+        if(mEventbusTag != null && mEventbusTag.length()>0){
             EventBus.getDefault().post(new MsgEventBus(city), mEventbusTag);
         }else {
             Intent data = new Intent();

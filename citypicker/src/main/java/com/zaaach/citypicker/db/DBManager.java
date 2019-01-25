@@ -24,8 +24,8 @@ public class DBManager {
     private static final String ASSETS_NAME = "china_cities.db";
     private static final String DB_NAME = "china_cities.db";
     private static final String TABLE_NAME = "city";
-    private static final String NAME = "name";
-    private static final String PINYIN = "pinyin";
+    private static final String NAME = "CITY";
+    private static final String PINYIN = "PINYIN";
     private static final int BUFFER_SIZE = 1024;
     private String DB_PATH;
     private Context mContext;
@@ -83,8 +83,8 @@ public class DBManager {
 
     public List<City> searchCity(final String keyword){
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
-        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME +" where name like \"%" + keyword
-                + "%\" or pinyin like \"%" + keyword + "%\"", null);
+        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME +" where CITY like \"%" + keyword
+                + "%\" or PINYIN like \"%" + keyword + "%\"", null);
         List<City> result = new ArrayList<>();
         City city;
         while (cursor.moveToNext()){
