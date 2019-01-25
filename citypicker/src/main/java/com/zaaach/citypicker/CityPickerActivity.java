@@ -49,7 +49,7 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
     private DBManager dbManager;
 
     private String mEventbusTag ="";
-    private String mCity;
+    private City mCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
     private void getIntentData() {
         Intent intent = getIntent();
         mEventbusTag = intent.getStringExtra(KEY_EVENTBUS_TAG);
-        mCity = intent.getStringExtra(KEY_LOCATE_CITY);
+        mCity = (City) intent.getSerializableExtra(KEY_LOCATE_CITY);
     }
 
 
@@ -75,7 +75,7 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
         mCityAdapter = new CityListAdapter(this, mAllCities);
         mCityAdapter.setOnCityClickListener(new CityListAdapter.OnCityClickListener() {
             @Override
-            public void onCityClick(String name) {
+            public void onCityClick(City name) {
                 back(name);
             }
 
@@ -141,7 +141,7 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
         mResultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                back(mResultAdapter.getItem(position).getName());
+                back(mResultAdapter.getItem(position));
             }
         });
 
@@ -156,7 +156,7 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
         QMUIStatusBarHelper.setStatusBarLightMode(this);
     }
 
-    private void back(String city){
+    private void back(City city){
         if(mEventbusTag != null && mEventbusTag.length()>0){
             EventBus.getDefault().post(new MsgEventBus(city), mEventbusTag);
         }else {

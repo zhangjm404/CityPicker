@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.zaaach.citypicker.CityPickerActivity;
+import com.zaaach.citypicker.model.City;
 import com.zaaach.citypicker.model.MsgEventBus;
 
 import org.simple.eventbus.EventBus;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CityPickerActivity.class);
                 intent.putExtra(CityPickerActivity.KEY_EVENTBUS_TAG, TAG_MAIN);
-                intent.putExtra(CityPickerActivity.KEY_LOCATE_CITY, "广州");
+                intent.putExtra(CityPickerActivity.KEY_LOCATE_CITY, new City("广东省","广州市","G"));
                 startActivity(intent);
             }
         });
@@ -48,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_PICK_CITY && resultCode == RESULT_OK) {
             if (data != null) {
-                String city = data.getStringExtra(CityPickerActivity.KEY_PICKED_CITY);
-                resultTV.setText("当前选择：" + city);
+                City city = (City) data.getSerializableExtra(CityPickerActivity.KEY_PICKED_CITY);
+                resultTV.setText(String.format("当前选择：%s%s", city.getProvince(), city.getName()));
             }
         }
     }
@@ -62,6 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscriber(tag = TAG_MAIN, mode = ThreadMode.MAIN)
     private void getCity(MsgEventBus msgEventBus) {
-        resultTV.setText("当前选择：" + msgEventBus.getCity());
+        resultTV.setText(String.format("当前选择：%s%s", msgEventBus.getCity().getProvince(), msgEventBus.getCity().getName()));
     }
 }

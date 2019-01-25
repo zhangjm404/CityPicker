@@ -8,17 +8,17 @@ package com.zaaach.citypicker.model;
  */
 
 public class MsgEventBus {
-    private String city;
+    private City city;
 
-    public MsgEventBus(String city) {
+    public MsgEventBus(City city) {
         this.city = city;
     }
 
-    public String getCity() {
+    public City getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(City city) {
         this.city = city;
     }
 }

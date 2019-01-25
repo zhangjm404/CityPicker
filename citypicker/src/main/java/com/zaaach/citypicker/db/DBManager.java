@@ -24,8 +24,9 @@ public class DBManager {
     private static final String ASSETS_NAME = "china_cities.db";
     private static final String DB_NAME = "china_cities.db";
     private static final String TABLE_NAME = "city";
-    private static final String NAME = "CITY";
+    private static final String CITY = "CITY";
     private static final String PINYIN = "PINYIN";
+    private static final String PROVINCE = "PROVINCE";
     private static final int BUFFER_SIZE = 1024;
     private String DB_PATH;
     private Context mContext;
@@ -70,9 +71,10 @@ public class DBManager {
         List<City> result = new ArrayList<>();
         City city;
         while (cursor.moveToNext()){
-            String name = cursor.getString(cursor.getColumnIndex(NAME));
+            String cityStr = cursor.getString(cursor.getColumnIndex(CITY));
             String pinyin = cursor.getString(cursor.getColumnIndex(PINYIN));
-            city = new City(name, pinyin);
+            String province = cursor.getString(cursor.getColumnIndex(PROVINCE));
+            city = new City(province,cityStr, pinyin);
             result.add(city);
         }
         cursor.close();
@@ -88,9 +90,10 @@ public class DBManager {
         List<City> result = new ArrayList<>();
         City city;
         while (cursor.moveToNext()){
-            String name = cursor.getString(cursor.getColumnIndex(NAME));
+            String province = cursor.getString(cursor.getColumnIndex(PROVINCE));
+            String name = cursor.getString(cursor.getColumnIndex(CITY));
             String pinyin = cursor.getString(cursor.getColumnIndex(PINYIN));
-            city = new City(name, pinyin);
+            city = new City(province,name, pinyin);
             result.add(city);
         }
         cursor.close();
