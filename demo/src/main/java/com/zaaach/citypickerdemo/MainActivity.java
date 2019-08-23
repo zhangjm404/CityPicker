@@ -43,6 +43,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        findViewById(R.id.btn_custom_title).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CustomTitleCityPickerListActivity.class);
+                intent.putExtra(CityPickerActivity.KEY_EVENTBUS_TAG, TAG_MAIN);
+                intent.putExtra(CityPickerActivity.KEY_LOCATE_CITY, new City("广东省","广州市","G"));
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -42,6 +43,7 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
     private ImageView clearBtn;
     private ImageView backBtn;
     private ViewGroup emptyView;
+    private LinearLayout layoutTitle;
 
     private CityListAdapter mCityAdapter;
     private ResultListAdapter mResultAdapter;
@@ -59,6 +61,7 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
         getIntentData();
         initData();
         initView();
+        customTitleLayout(layoutTitle);
     }
 
     private void getIntentData() {
@@ -150,6 +153,8 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
 
         clearBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
+
+        layoutTitle = (LinearLayout) findViewById(R.id.layout_title);
     }
 
     private void setStatusBar() {
@@ -179,5 +184,9 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
             finish();
 
         }
+    }
+
+    public void customTitleLayout(LinearLayout layoutTitle){
+
     }
 }
