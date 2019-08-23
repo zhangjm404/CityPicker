@@ -91,6 +91,33 @@ enjoy it.
 ```
 
 # Ad
-我的[动漫周边淘宝店]( https://shop238932691.taobao.com/) ，希望亲可以关注下(dan)：
+原作者的[动漫周边淘宝店]( https://shop238932691.taobao.com/) ，希望亲可以关注下(dan)：
 
 ![二维码](https://img.alicdn.com/imgextra/i1/769720206/TB2AnBVar0kpuFjy0FjXXcBbVXa_!!769720206.png)
+
+
+
+# 自定义标题栏
+
+### step1:
+
+新建一个 Activity 继承 `CityPickerActivity`
+
+### step2:
+
+重写 `customTitleLayout` 方法
+
+```java
+@Override
+    public void customTitleLayout(LinearLayout layoutTitle) {
+        super.customTitleLayout(layoutTitle);
+        layoutTitle.removeAllViews();
+        TextView textView = new TextView(this);
+        textView.setText("自定义标题栏");
+        textView.setBackgroundColor(Color.RED);
+        layoutTitle.addView(textView);
+    }
+```
+### step3:
+
+按照上面的方法，跳到自定义的 Activity 即可
